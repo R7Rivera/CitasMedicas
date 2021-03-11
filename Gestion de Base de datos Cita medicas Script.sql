@@ -5,7 +5,7 @@ CREATE TABLE public.paciente (
 	ape_paciente character varying(30),
 	direc_paciente character varying(50),
 	telf_paciente character(10),
-    fechaNaci_paciente date,
+        fechaNaci_paciente date,
 	genero_paciente varchar(1),
 	peso_paciente numeric(4,2),
 	email_paciente varchar(30),
@@ -51,19 +51,14 @@ CREATE TABLE public.cita_medica (
 	precio_cita numeric(4,2),
 	medicamen_cita varchar(50),
 	diagnositco_cita varchar(50),
+	max_cita int,
 	id_pago_pago integer NOT NULL,
 	Id_medico_medico integer NOT NULL,
 	Id_paciente_paciente integer NOT NULL,
 	CONSTRAINT cita_medica_pk PRIMARY KEY (id_cita)
 
 );
-
-CREATE TABLE public.historial_clinico (
-	id_historial integer NOT NULL,
-	Id_paciente_paciente integer NOT NULL,
-	CONSTRAINT historial_clinico_pk PRIMARY KEY (id_historial)
-
-);
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ALTER TABLE public.cita_medica ADD CONSTRAINT medico_fk FOREIGN KEY (Id_medico_medico)
 REFERENCES public.medico (Id_medico) MATCH FULL
@@ -72,11 +67,6 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE public.cita_medica ADD CONSTRAINT paciente_fk FOREIGN KEY (Id_paciente_paciente)
 REFERENCES public.paciente (Id_paciente) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
-
-ALTER TABLE public.historial_clinico ADD CONSTRAINT paciente_fk FOREIGN KEY (Id_paciente_paciente)
-REFERENCES public.paciente (Id_paciente) MATCH FULL
-ON DELETE RESTRICT ON UPDATE CASCADE;
-
 
 ALTER TABLE public.medico ADD CONSTRAINT categoria_fk FOREIGN KEY (id_categoria_categoria1)
 REFERENCES public.categoria (id_categoria) MATCH FULL
@@ -87,18 +77,18 @@ ALTER TABLE public.cita_medica ADD CONSTRAINT pago_fk FOREIGN KEY (id_pago_pago)
 REFERENCES public.pago (id_pago) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 INSERT INTO PAGO VALUES ('1','PAGADO');
 INSERT INTO PAGO VALUES ('2','PENDIENTE');
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 INSERT INTO categoria VALUES ('1','Cardiología');
 INSERT INTO categoria VALUES ('2','Pediátria');
 INSERT INTO categoria VALUES ('3','Ginecología');
 INSERT INTO categoria VALUES ('4','Medicina General');
 INSERT INTO categoria VALUES ('5','Odontologia');
 
-
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 insert into PACIENTE values ('1','1314539485','ROSA GUADALUPE','RIVERA AlVARADO','calle 16 avenida 32',
 							 '0980034395','2020/07/7','F','48.34','rosa@hotmail.com','Paracetamol');
 							 
@@ -148,7 +138,7 @@ insert into PACIENTE values ('13','1312575200','CARLOS SILVERIO','CAMPUZANO PINO
 insert into PACIENTE values ('14','1309752754','ONDINA OLIVIA','ZAMBRANO NEVAREZ','Barrio Jocay','0991365767',
 							 '2010/5/6','F','48.3','zambrano@hotmail.com','Ninguna');
 
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
 insert into medico values ('1','1314567393','GEMA BEATRIZ','OCHOA RAMIREZ',
 'gema@hotmail.com','Malecón y calle 14','0992778119','F','4');
 
@@ -174,80 +164,66 @@ insert into medico values ('6','1301813786','MARCOS OSWALDO','CEVALLOS DELGADO',
 
 insert into medico values ('7','1302146426',' JOSE RAMON','RENGIFO LOOR','Rloor@hotmail.com','Barrio 20 de Mayo',
 '0991262467','M','1');
-
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 INSERT INTO Cita_Medica VALUES ('1','2020/12/20','12:00 AM',
 							'Medicina General','pendiente','20.00','cefalosporinas,cefazolina',
-								'Estafilococo aureus','1',
-								'1','1');					
-								
-INSERT INTO Cita_Medica VALUES ('2','2020/05/2','9:00 AM',
-							'Cardiologia','realizada','50.00','Diuréticos,Digoxina','Insuficiencia cardíaca','2'
-								,'7','2');		
+								'Estafilococo aureus','1','1',
+								'1','1');	
+							
+INSERT INTO Cita_Medica VALUES ('2','2020/12/20','10:00 AM',
+							'Medicina General','pendiente','20.00','cefalosporinas,cefazolina',
+								'Estafilococo aureus','1','1',
+								'1','1');
 								
 INSERT INTO Cita_Medica VALUES ('3','2020/12/22','9:00 AM',
-							'Pediatria','pendiente','30.00','Antitusígenos,Expectorante','Tos Aguda','1','3','3');
+							'Pediatria','pendiente','30.00','Antitusígenos,Expectorante','Tos Aguda','1','1','3','3');
 													
 INSERT INTO Cita_Medica VALUES ('4','2020/05/2','11:00 AM',
-							'Medicina General','realizada','20.00','esomeprazol,omeprazol','Reflujo Gastroesofágico',
+							'Medicina General','realizada','20.00','esomeprazol,omeprazol','Reflujo Gastroesofágico','1',
 								'2','5','4');
 													
 INSERT INTO Cita_Medica VALUES ('5','2020/12/06','11:00 AM',
-							'Pedriatria','pendiente','30.00','Descongestivos aerosol nasal','Sinusitis bacteriana','1','3','5');
+							'Pedriatria','pendiente','30.00','Descongestivos aerosol nasal','Sinusitis bacteriana','1','1','3','5');
 							
 						
 INSERT INTO Cita_Medica VALUES ('6','2020/05/08','9:00 AM',
-							'Cardiologia','realizada','50.00','Diuréticos de tiazida','Hipertensión','2','6','6');					
+							'Cardiologia','realizada','50.00','Diuréticos de tiazida','Hipertensión','1','2','6','6');					
 							
 INSERT INTO Cita_Medica VALUES ('7','2020/05/9','9:00 AM',
-							'Ginecologia','realizada','45.00','Terapia hormonal','Menopausia','1','4','7');
+							'Ginecologia','realizada','45.00','Terapia hormonal','Menopausia','1','1','4','7');
 																			
 INSERT INTO Cita_Medica VALUES ('8','2020/06/9','8:00 AM',
-							'Odontologia','Realizada','35.00','Pasta dental que contengan flúor','Caries dental','2','2','8');
+							'Odontologia','Realizada','35.00','Pasta dental que contengan flúor','Caries dental','1','2','2','8');
 						
 INSERT INTO Cita_Medica VALUES ('9','2020/06/9','10:00 AM',
-							'Odontologia','suspendida','35.00','Angilepto','Gingivitis','1','2','9');
+							'Odontologia','suspendida','35.00','Angilepto','Gingivitis','1','1','2','9');
 
 INSERT INTO Cita_Medica VALUES ('10','2020/06/10','8:00 AM',
-							'Pediatria','realizada','30.00','trimoxazol,Ampicilina','gastroenteritis','1','3','10');
+							'Pediatria','realizada','30.00','trimoxazol,Ampicilina','gastroenteritis','1','1','3','10');
 
 INSERT INTO Cita_Medica VALUES ('11','2020/06/10','8:00 AM',
-							'Medicina General','suspendida','20.00','Azatioprina,Ciclosporina','1305393132','2','1','11');
+							'Medicina General','suspendida','20.00','Azatioprina,Ciclosporina','1','1305393132','2','1','11');
 							
 INSERT INTO Cita_Medica VALUES ('12','2020/06/10','10:00 AM',
-							'Medicina General','realizadas','20.00','Proto Glyvenol,Nikzon','Hemorroides','1','5','12');
+							'Medicina General','realizadas','20.00','Proto Glyvenol,Nikzon','Hemorroides','1','1','5','12');
 
 
 INSERT INTO Cita_Medica VALUES ('13','2020/06/10','10:00 AM',
-							'Cardiologia','realizada','50.00','Diuréticos de tiazida','Hipertensión','1','7','13');
+							'Cardiologia','suspendida','50.00','Diuréticos de tiazida','Hipertensión','1','1','7','13');
 
 
 
 INSERT INTO Cita_Medica VALUES ('14','2020/06/10','10:00 AM',
-							'Pediatria','realizada','30.00','paracetamol,ibuprofeno','Resfriado común','1','3','14');
+							'Pediatria','realizada','30.00','paracetamol,ibuprofeno','Resfriado común','1','1','3','14');
+
+INSERT INTO Cita_Medica VALUES ('15','2020/06/30','13:00 PM',
+							'Pediatria','suspendida','30.00','paracetamol,ibuprofeno','Resfriado común','1','1','3','14');
 
 
 
 
 
-
-
-
-
-INSERT INTO Historial_Clinico VALUES ('1','1');
-INSERT INTO Historial_Clinico VALUES ('2','2');
-INSERT INTO Historial_Clinico VALUES ('3','3');
-INSERT INTO Historial_Clinico VALUES ('4','4');
-INSERT INTO Historial_Clinico VALUES ('5','5');
-INSERT INTO Historial_Clinico VALUES ('6','6');
-INSERT INTO Historial_Clinico VALUES ('7','7');
-INSERT INTO Historial_Clinico VALUES ('8','8');
-INSERT INTO Historial_Clinico VALUES ('9','9');
-INSERT INTO Historial_Clinico VALUES ('10','10');
-INSERT INTO Historial_Clinico VALUES ('11','11');
-INSERT INTO Historial_Clinico VALUES ('12','12');
-INSERT INTO Historial_Clinico VALUES ('13','13');
-INSERT INTO Historial_Clinico VALUES ('14','14');
 
 
 
